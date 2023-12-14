@@ -20,6 +20,7 @@ import { MessageModule } from './modules/messages/message.module';
 import { EventsModule } from './modules/events/event.module';
 import { AppGateway } from './app.gateway';
 import { PDFModule } from './modules/pdf/pdf.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { PDFModule } from './modules/pdf/pdf.module';
     EventsModule,
     PDFModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [AppGateway],
 })
 export class AppModule implements NestModule {
