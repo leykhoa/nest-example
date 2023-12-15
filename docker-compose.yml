@@ -7,8 +7,9 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_DATABASE: 'nest-example'
       MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: nest-example
+
     ports:
       - 3306:3306
 

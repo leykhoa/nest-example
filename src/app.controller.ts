@@ -1,12 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
+import { CategoryEntity } from './modules/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-@Controller()
+@Controller('api/v1')
 export class AppController {
-  constructor() {}
+  constructor(
+    @InjectRepository(CategoryEntity)
+    private categoryRepository: Repository<CategoryEntity>,
+  ) {}
 
   @Get()
-  
-  getHello(): string {
-    return 'Hello world!!!';
+  getData() {
+    return this.categoryRepository.find({
+      relations: {
+        brands: true,
+      },
+    });
   }
 }

@@ -19,11 +19,22 @@ import { ConversationModule } from './modules/conversations/conversation.module'
 import { MessageModule } from './modules/messages/message.module';
 import { EventsModule } from './modules/events/event.module';
 import { AppGateway } from './app.gateway';
-import { PDFModule } from './modules/pdf/pdf.module';
+
 import { AppController } from './app.controller';
+import { CategoryEntity } from './modules/category.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        auth: {
+          user: 'leykhoaqk@gmail.com',
+          pass: 'sqmc ofjh fvzu tmsj',
+        },
+      },
+    }),
     TypeOrmModule.forRoot(typeOrmConfig),
     ProductModule,
     UserModule,
@@ -31,7 +42,7 @@ import { AppController } from './app.controller';
     ConversationModule,
     MessageModule,
     EventsModule,
-    PDFModule,
+    TypeOrmModule.forFeature([CategoryEntity]),
   ],
   controllers: [AppController],
   providers: [AppGateway],

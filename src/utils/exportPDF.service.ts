@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 
 @Injectable()
-export class exportPDFService {
+export class ExportPDFService {
   async generatePdf(data = '') {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -30,6 +30,7 @@ export class exportPDFService {
   }
 
   orderContentPDF() {
-    return ``;
+    return `
+    <h1>Đây là orderContent</h1>`;
   }
 }

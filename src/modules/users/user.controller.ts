@@ -4,7 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
+import { ApiTags, ApiTooManyRequestsResponse } from '@nestjs/swagger';
 
+
+@ApiTags('User')
 @Controller('api/v1/users')
 export class UserController {
   constructor(private productService: UserService) {}
@@ -17,6 +20,8 @@ export class UserController {
   @Post()
   createUser() {}
 
+
+  @ApiTooManyRequestsResponse()
   @Put(':id')
   updateUser() {}
 

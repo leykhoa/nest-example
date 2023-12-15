@@ -13,7 +13,8 @@ export class ConversationController {
   @Get()
   getData() {
     return this.conversationRepository.find({
-        relations: ["messages"]
+      relations: ['messages'],
+      
     });
   }
 }
