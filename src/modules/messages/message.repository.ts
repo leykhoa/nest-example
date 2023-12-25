@@ -11,7 +11,7 @@ export class MessageRepository {
     private messageRepository: Repository<MessageEntity>,
   ) {}
 
-  create(data: CreateMessageDto) {
+  create(data: any) {
     const messageEntity = this.messageRepository.create(data);
     return this.messageRepository.save(messageEntity);
   }

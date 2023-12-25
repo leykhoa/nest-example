@@ -1,8 +1,11 @@
+import { CategoryEntity } from 'src/modules/category.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,6 +25,14 @@ export class ProductEntity {
   price: number;
   @Column({ length: 500 })
   imageUrl: string;
+
+
+  @Column({default: 100})
+  quantity: number;
+
+  @ManyToOne(() => CategoryEntity, (category) => category.products, {onDelete: "SET NULL", onUpdate: "SET NULL"})
+  @JoinColumn()
+  category: CategoryEntity;
 
   @CreateDateColumn()
   createAt: Date;

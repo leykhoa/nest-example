@@ -28,7 +28,7 @@ export class UploadFileCSV implements NestMiddleware {
   });
 
   use(req: Request, res: Response, next: NextFunction) {
-    this.upload.single('file')(req, res, async (err: any) => {
+    this.upload.single('fileCSV')(req, res, async (err: any) => {
       if (err) {
         console.log(err);
       }

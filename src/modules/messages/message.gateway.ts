@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { MessageService } from './message.service';
+import { ConversationEntity } from '../conversations/entity/conversation.entity';
 
 @WebSocketGateway({
   cors: {
@@ -22,37 +23,27 @@ export class MessageGateway {
   server: Server;
   constructor(private messageService: MessageService) {}
 
-  @SubscribeMessage('messages')
-  createMessage(@MessageBody() data: CreateMessageDto) {
-    try {
-      this.messageService.createMessage(data);
-    } catch (error) {
-      console.log(11, error);
-    }
-  }
-
   @SubscribeMessage('sendMessageToAdmin')
   async sendMessageToAdmin(
-    @MessageBody() data: { conversationId: number; data: any },
+    @MessageBody()  data: CreateMessageDto,
   ) {
-    console.log(1111, data);
 
+    console.log(data);
+    const message = await this.messageService.createMessageFromUser(data);
     this.server
-      .to(`admin-room`)
-      .emit('messageFromUser', {
-        conversationId: data.conversationId,
-        message: data.data,
-      });
+    .to(`user-room-${data.conversation.id}`)
+    .emit('messageFromAdmin');
+    this.server.emit('messageToAdmin');
   }
 
   @SubscribeMessage('sendMessageToUser')
-  async sendMessageToUser(
-    @MessageBody() data: { conversationId: number; data: any },
-  ) {
-    console.log(222, data);
+  async sendMessageToUser(@MessageBody() data: CreateMessageDto) {
+    const message = await this.messageService.createMessageFromAdmin(data);
     this.server
-      .to(`user-room-${data.conversationId}`)
-      .emit('messageFromAdmin', { message: data.data });
+      .to(`user-room-${data.conversation.id}`)
+      .emit('messageFromAdmin');
+
+    this.server.emit('messageToAdmin');
   }
 
   @SubscribeMessage('joinRoom')

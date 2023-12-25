@@ -2,7 +2,6 @@ import { MessageEntity } from 'src/modules/messages/entity/message.entity';
 import {
   Column,
   CreateDateColumn,
-  
   DeleteDateColumn,
   Entity,
   OneToMany,
@@ -16,10 +15,7 @@ export class ConversationEntity {
   id: number;
 
   @Column({ nullable: false, unique: true })
-  userId: string;
-
-  @Column({ nullable: false })
-  lastMessage: string;
+  userId: number;
 
   @Column({ nullable: false })
   isSender: boolean;
@@ -27,7 +23,7 @@ export class ConversationEntity {
   @Column({ default: false })
   isRead: boolean;
 
-  @OneToMany(()=>MessageEntity, (messages)=> messages.conversation)
+  @OneToMany(() => MessageEntity, (messages) => messages.conversation)
   messages: MessageEntity[];
 
   @CreateDateColumn()
@@ -36,4 +32,5 @@ export class ConversationEntity {
   updateAt: Date;
   @DeleteDateColumn()
   deleteAt: Date;
+  
 }

@@ -14,9 +14,7 @@ export class ExportPDFService {
     };
 
     await page.setContent(data);
-
     const pdfBuffer = await page.pdf({ format: 'A4', margin: margins });
-
     await browser.close();
 
     return {
@@ -32,5 +30,9 @@ export class ExportPDFService {
   orderContentPDF() {
     return `
     <h1>Đây là orderContent</h1>`;
+  }
+  createContentCer(){
+
+    
   }
 }

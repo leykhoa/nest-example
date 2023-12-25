@@ -6,6 +6,7 @@ import { UploadFileCSV } from './common/middlewares/uploadCSV.middleware';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+  
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const config = new DocumentBuilder()
@@ -15,8 +16,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  const uploadFileCSV = new UploadFileCSV();
   app.enableCors();
+  // Thêm middleware upload file CSV
+  const uploadFileCSV = new UploadFileCSV();
   app.use(uploadFileCSV.use.bind(uploadFileCSV));
   await app.listen(3000);
 }

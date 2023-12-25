@@ -30,10 +30,11 @@ export class UploadFile implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
 
     this.upload.any()(req, res, async (err: any) => {
-      const files = req.files as Express.Multer.File[];
+      
       if (err) {
         console.log(err);
       }
+      const files = req.files as Express.Multer.File[];
       if (files) {
         const urls = files.map(async (item: Express.Multer.File) => {
           const metatype = {

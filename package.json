@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migrate:create": "ts-node ./node_modules/typeorm/cli.js migration:create -n",
+    "migrate:up": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrate:down": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",
@@ -37,6 +40,7 @@
     "csv-parse": "^5.5.3",
     "dotenv": "^16.3.1",
     "firebase": "^10.7.1",
+    "firebase-admin": "^12.0.0",
     "mysql2": "^3.6.5",
     "nodemailer": "^6.9.7",
     "puppeteer": "^21.6.1",

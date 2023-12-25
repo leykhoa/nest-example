@@ -9,12 +9,9 @@ import { ProductModule } from './modules/products/product.module';
 import { UploadFile } from './common/middlewares/uploadFile.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './configs/typeOrm.config';
-import { ProductEntity } from './modules/products/entity/product.entity';
 import 'dotenv/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
-import { UserEntity } from './modules/users/entity/user.entity';
-import { APP_GUARD } from '@nestjs/core';
 import { ConversationModule } from './modules/conversations/conversation.module';
 import { MessageModule } from './modules/messages/message.module';
 import { EventsModule } from './modules/events/event.module';
@@ -23,6 +20,8 @@ import { AppGateway } from './app.gateway';
 import { AppController } from './app.controller';
 import { CategoryEntity } from './modules/category.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { CategoryModule } from './modules/Category/category.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -42,6 +41,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
     ConversationModule,
     MessageModule,
     EventsModule,
+    CategoryModule,
+    OrderModule,
     TypeOrmModule.forFeature([CategoryEntity]),
   ],
   controllers: [AppController],

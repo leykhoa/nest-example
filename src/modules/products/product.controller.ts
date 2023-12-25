@@ -1,4 +1,14 @@
-import { Controller, Post, Req, Get, Put, Delete, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Query,
+  Res,
+} from '@nestjs/common';
 
 import { Request } from 'express';
 
@@ -10,6 +20,7 @@ import { Role } from 'src/common/enums/role.enum';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SendMailService } from 'src/utils/sendMail.service';
 import { ExportPDFService } from 'src/utils/exportPDF.service';
+import { Response } from 'express';
 
 // @UseGuards(AuthGuard)
 
@@ -26,8 +37,16 @@ export class ProductController {
   @ApiOperation({ summary: 'Get data product' })
   @Roles(Role.Admin, Role.Editor)
   @Get()
-  async getProduct() {
-    this.productService.getProduct();
+  async getProduct(@Query() query) {
+    console.log('Kiểm tra query:', query);
+
+    // Lấy query
+
+    const data = await this.productService.getProduct({
+      ...query,
+    });
+
+    return data;
   }
   @Post()
   async createProduct(@Body() body: CreateProductDto) {
@@ -54,5 +73,16 @@ export class ProductController {
     const pdfBuffer = await this.exportPDFService.generatePdf(createContentPdf);
     const contentMail = this.sendMailService.mailOrderConent('');
     this.sendMailService.sendMail(contentMail, pdfBuffer.data);
+  }
+
+  @Get('pdf')
+  async getPdf(@Res() res: Response) {
+    const createContentPdf = this.exportPDFService.orderContentPDF();
+    const pdfInfo = await this.exportPDFService.generatePdf(createContentPdf);
+
+
+    res.set(pdfInfo.config)
+
+    res.send(pdfInfo.data);
   }
 }

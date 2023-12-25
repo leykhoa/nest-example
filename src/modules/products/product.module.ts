@@ -10,6 +10,12 @@ import { ExportPDFService } from 'src/utils/exportPDF.service';
 @Module({
   imports: [TypeOrmModule.forFeature([ProductEntity])],
   controllers: [ProductController],
-  providers: [ProductService, ProductRepository, SendMailService, ExportPDFService],
+  providers: [
+    ProductService,
+    ProductRepository,
+    SendMailService,
+    ExportPDFService,
+  ],
+  exports: [ProductRepository],
 })
 export class ProductModule {}

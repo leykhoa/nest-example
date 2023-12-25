@@ -18,10 +18,15 @@ export class MessageEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  userId: number;
 
   @ManyToOne(() => UserEntity, (user) => user.messages)
   @JoinColumn()
   user: UserEntity;
+
+  @Column()
+  conversationId: number;
 
   @ManyToOne(() => ConversationEntity, (conversation) => conversation.messages)
   @JoinColumn()
@@ -36,6 +41,7 @@ export class MessageEntity {
   @CreateDateColumn()
   createAt: Date;
 
+  
   @UpdateDateColumn()
   updateAt: Date;
 

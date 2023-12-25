@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,12 +9,14 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserRepository } from '../users/user.repository';
+import * as admin from 'firebase-admin';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userRepoitory: UserRepository,
     private jwtService: JwtService,
+    @Inject('FIREBASE_ADMIN') private firebaseAdmin: admin.app.App,
   ) {}
   async login(data: LoginDto) {
     const user = await this.userRepoitory.findByEmail(data.email);
@@ -57,8 +60,6 @@ export class AuthService {
     return this.userRepoitory.create(newData);
   }
 
-  async fetchUser() {}
-
   protected async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
   }
@@ -72,6 +73,18 @@ export class AuthService {
       return await this.jwtService.signAsync(data);
     } catch (error) {
       console.log(111, error);
+    }
+  }
+
+  async verifyToken(idToken: string): Promise<admin.auth.DecodedIdToken> {
+    try {
+      const decodedToken = await this.firebaseAdmin
+        .auth()
+        .verifyIdToken(idToken);
+
+      return decodedToken;
+    } catch (error) {
+    
     }
   }
 }

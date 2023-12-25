@@ -5,9 +5,9 @@ import { UserRepository } from '../users/user.repository';
 import { JwtModule } from '@nestjs/jwt';
 
 import 'dotenv/config';
-import { UserModule } from '../users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../users/entity/user.entity';
+import * as admin from 'firebase-admin';
 
 @Module({
   imports: [
@@ -19,6 +19,19 @@ import { UserEntity } from '../users/entity/user.entity';
     TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserRepository],
+  providers: [
+    AuthService,
+    UserRepository,
+    {
+      provide: 'FIREBASE_ADMIN',
+      useFactory: () => {
+        const serviceAccount = require('../../firebase-service.json');
+        admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+        });
+        return admin;
+      },
+    },
+  ],
 })
 export class AuthModule {}

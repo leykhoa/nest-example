@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { EntityManager, Repository, getRepository } from 'typeorm';
 import { ProductEntity } from './entity/product.entity';
 import { CreateProductDto } from './dto/createProduct.dto';
 
@@ -12,8 +12,13 @@ export class ProductRepository {
   ) {}
 
   findOne() {}
-  findAll(): Promise<ProductEntity[]> {
-    return this.productRepository.find();
+  findAll(queryObject: any): Promise<ProductEntity[]> {
+    console.log(111, queryObject);
+
+    return this.productRepository.find({
+      ...queryObject,
+      relations: { category: true },
+    });
   }
   insert(data: CreateProductDto) {
     try {
@@ -32,6 +37,10 @@ export class ProductRepository {
     console.log(1111, productEntity);
     // return this.productRepository.save(productEntity);
   }
-  update() {}
+  update(id: number, data: any, transactionalEntityManager?: EntityManager) {
+    if (id && transactionalEntityManager) {
+      return transactionalEntityManager.update(ProductEntity, id, data);
+    }
+  }
   delete() {}
 }

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Post,
   Req,
   Res,
@@ -12,10 +13,16 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Response, Request } from 'express';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { authFirebase } from 'src/configs/firebase.config';
+import { getAuth } from 'firebase/auth';
+import { FirebaseAdminService } from 'src/utils/firebase.service';
 
 @Controller('api/v1/auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+
+  ) {}
   @Post('login')
   async login(@Body() body: LoginDto, @Res() res: Response) {
     const ret = await this.authService.login(body);
@@ -36,9 +43,29 @@ export class AuthController {
   @UseGuards(AuthGuard)
   fetchData(@Req() req) {
     // --- có được token ---> parse --> userId --> findPk
-if(req?.userId) {
-
-}
+    if (req?.userId) {
+    }
     console.log(12111, req);
+  }
+
+  @Get('login-firebase')
+  async loginFirebase(@Req() req: Request) {
+    const token = req.headers['authorization'] as string;
+
+    console.log(1111111, token);
+    
+
+    const decodedToken = await this.authService.verifyToken(token);
+   
+    return decodedToken;
+
+  }
+
+  @Get('fetch-firebase')
+  async fetchFirebase(@Req() req: Request) {
+   
+
+
+
   }
 }
